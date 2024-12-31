@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -10,7 +11,7 @@ import (
 
 func main() {
 	birthDate, _ := time.Parse("2006-01-02", "1976-02-07")
-	router := mux.NewRouter()
+	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/members", func(w http.ResponseWriter, r *http.Request) {
 		var members = []Member{
 			{Id: "1", FirstName: "John", LastName: "Doe", BirthDate: birthDate},
@@ -21,7 +22,13 @@ func main() {
 			panic(err)
 		}
 	})
-	log.Fatal(http.ListenAndServe(":8000", router))
+
+	// Where ORIGIN_ALLOWED is like `scheme://dns[:port]`, or `*` (insecure)
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With"})
+	originsOk := handlers.AllowedOrigins([]string{"http://localhost:4200"})
+	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
+
+	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(headersOk, originsOk, methodsOk)(router)))
 }
 
 type Member struct {
