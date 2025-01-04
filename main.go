@@ -10,8 +10,8 @@ import (
 )
 
 func main() {
-	birthDate, _ := time.Parse("2006-01-02", "1976-02-07")
-	router := mux.NewRouter().StrictSlash(true)
+	birthDate, _ := time.Parse(time.DateOnly, "1976-02-07")
+	router := mux.NewRouter()
 	router.HandleFunc("/members", func(w http.ResponseWriter, r *http.Request) {
 		var members = []Member{
 			{Id: "1", FirstName: "John", LastName: "Doe", BirthDate: birthDate},
@@ -23,7 +23,7 @@ func main() {
 		}
 	})
 
-	// Where ORIGIN_ALLOWED is like `scheme://dns[:port]`, or `*` (insecure)
+	// Handle CORS
 	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With"})
 	originsOk := handlers.AllowedOrigins([]string{"http://localhost:4200"})
 	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
