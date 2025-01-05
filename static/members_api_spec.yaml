@@ -1,0 +1,41 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  x-go-package: "github.com/oapi-codegen/runtime"
+  title: OpenApi spec for members endpoints
+
+servers:
+  - url: http://localhost
+paths:
+  /members:
+    get:
+      summary: Get members
+      operationId: getMembers
+      responses:
+         '200':
+           description: Collection of members
+           content:
+             application/json:
+                schema:
+                  $ref: '#/components/schemas/Members'
+components:
+  schemas:
+    Members:
+      type: array
+      items:
+        type: object
+        x-go-type-skup-optional-pointer: true
+        required:
+          - id
+          - first_name
+          - last_name
+        properties:
+          id:
+            type: string
+            x-go-skip-optional-pointer: true
+          first_name:
+            type: string
+            x-go-skip-optional-pointer: true
+          last_name:
+            type: string
+            x-go-skip-optional-pointer: true
