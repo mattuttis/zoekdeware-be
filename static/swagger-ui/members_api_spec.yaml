@@ -1,11 +1,11 @@
-openapi: "3.0.0"
+openapi: "3.0.3"
 info:
   version: 1.0.0
   x-go-package: "github.com/oapi-codegen/runtime"
   title: OpenApi spec for members endpoints
 
 servers:
-  - url: http://localhost
+  - url: http://127.0.0.1:8080
 paths:
   /members:
     get:
