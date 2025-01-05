@@ -24,11 +24,11 @@ func main() {
 
 	r := mux.NewRouter()
 
+	specRouter := r.PathPrefix("/spec").Subrouter()
+	specRouter.PathPrefix("/").Handler(http.StripPrefix("/spec", http.FileServer(http.Dir("api/spec"))))
+
 	swaggerRouter := r.PathPrefix("/swagger-ui").Subrouter()
 	swaggerRouter.PathPrefix("/").Handler(http.StripPrefix("/swagger-ui", http.FileServer(http.Dir("static/swagger-ui"))))
-	swaggerRouter.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.Error(w, "Swagger UI not found", http.StatusNotFound)
-	})
 
 	membersRouter := r.PathPrefix("/members").Subrouter()
 	membersServer := api.NewServer()
